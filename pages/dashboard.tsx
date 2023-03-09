@@ -1,4 +1,6 @@
-export default function Dashboard() {
+import withAuth from "@/utils/withAuth";
+
+const Dashboard = () => {
   return (
     <div className="overflow-hidden">
       {/* search field section */}
@@ -57,4 +59,6 @@ export default function Dashboard() {
       </div>
     </div>
   );
-}
+};
+
+export default withAuth(Dashboard);
