@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import axios from "axios";
 
 type Inputs = {
   email: string;
@@ -16,16 +17,27 @@ const RegisterForm = ({ parentCallback }: any) => {
     formState: { errors },
   } = useForm<Inputs>();
 
+  // submit function
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     try {
       if (data.password != data.confirmPassword) {
         setFormError("Password donot match");
       } else {
-        setFormError("");
-        // make post request
+        setFormError(""); // clear the form error
 
-        console.log(data);
-        parentCallback(0); // show the login page after registeration
+        // make post request
+        axios
+          .post("http://127.0.0.1:5000/api/v1/register", data)
+          .then((res: any) => {
+            if (res?.data?.status != "fail") {
+              parentCallback(0, res?.data?.message); // show the login page after registeration
+            } else {
+              setFormError(res?.data?.message);
+            }
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
       }
     } catch (error) {
       console.log(error);
@@ -40,7 +52,7 @@ const RegisterForm = ({ parentCallback }: any) => {
     <div className="w-full max-w-xs ">
       <h2 className="text-center py-3 text-lg">Health Searcher - Register</h2>
       <form
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col"
         onSubmit={handleSubmit(onSubmit)}
       >
         {formError && (

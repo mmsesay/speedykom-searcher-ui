@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
+import axios from "axios";
+import localForage from "localforage";
 
 type Inputs = {
   email: string;
@@ -8,6 +11,7 @@ type Inputs = {
 
 const LoginForm = ({ parentCallback }: any) => {
   const router = useRouter();
+  const [formError, setFormError] = useState<string>("");
 
   const {
     register,
@@ -15,9 +19,26 @@ const LoginForm = ({ parentCallback }: any) => {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    if (data) {
-      console.log(data);
-      router.push("/dashboard"); // redirect to the dashboard successful login
+    try {
+      if (data) {
+        // make post request
+        axios
+          .post("http://127.0.0.1:5000/api/v1/login", data)
+          .then((res: any) => {
+            if (res?.data.status === "success") {
+              localForage.setItem("tk", res?.data.auth_token);
+              router.push("/dashboard"); // redirect to the dashboard after successful login
+            }
+          })
+          .catch((err: any) => {
+            setFormError(err?.response?.data.message);
+            setTimeout(() => {
+              setFormError("");
+            }, 3000);
+          });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -32,6 +53,11 @@ const LoginForm = ({ parentCallback }: any) => {
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         onSubmit={handleSubmit(onSubmit)}
       >
+        {formError && (
+          <p className="text-red-500 text-xs italic py-3 text-center">
+            {formError}
+          </p>
+        )}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"

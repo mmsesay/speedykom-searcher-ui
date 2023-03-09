@@ -1,6 +1,26 @@
+import { useRouter } from "next/router";
 import withAuth from "@/utils/withAuth";
+import localForage from "localforage";
 
 const Dashboard = () => {
+  const router = useRouter();
+
+  // remove the token and redirect to the login page
+  const handleLogout = () => {
+    const accessToken = localForage.getItem("tk");
+
+    accessToken
+      .then((token) => {
+        if (token) {
+          localForage.removeItem("tk");
+          router.push("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="overflow-hidden">
       {/* search field section */}
@@ -37,7 +57,12 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="my-2">
-          <p className="hover:text-blue-500 cursor-pointer">logout</p>
+          <p
+            className="hover:text-blue-500 cursor-pointer"
+            onClick={handleLogout}
+          >
+            logout
+          </p>
         </div>
       </div>
       {/* content section */}

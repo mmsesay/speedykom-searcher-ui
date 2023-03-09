@@ -9,6 +9,7 @@ const withAuth = (WrappedComponent: any) => {
     const Router = useRouter();
     const [verified, setVerified] = useState(false);
 
+    // redirect the user to the dashboard if they are already loggedIn
     useMemo(() => {
       const accessToken = localForage.getItem("tk");
 
@@ -19,11 +20,6 @@ const withAuth = (WrappedComponent: any) => {
             Router.replace("/");
           } else {
             setVerified(true);
-
-            // redirect to the dashboard if the user is already loggedIn
-            if (Router.pathname == "/") {
-              Router.replace("/dashboard");
-            }
           }
         })
         .catch((err) => console.log(err));
