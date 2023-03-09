@@ -1,4 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/router";
 
 type Inputs = {
   email: string;
@@ -6,12 +7,19 @@ type Inputs = {
 };
 
 const LoginForm = ({ parentCallback }: any) => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    if (data) {
+      console.log(data);
+      router.push("/dashboard"); // redirect to the dashboard successful login
+    }
+  };
 
   const handleButtonSwitch = (value: number) => {
     parentCallback(value);

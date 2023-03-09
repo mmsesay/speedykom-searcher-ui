@@ -9,6 +9,7 @@ type Inputs = {
 
 const RegisterForm = ({ parentCallback }: any) => {
   const [formError, setFormError] = useState<string>("");
+
   const {
     register,
     handleSubmit,
@@ -24,6 +25,7 @@ const RegisterForm = ({ parentCallback }: any) => {
         // make post request
 
         console.log(data);
+        parentCallback(0); // show the login page after registeration
       }
     } catch (error) {
       console.log(error);
