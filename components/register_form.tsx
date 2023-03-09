@@ -7,18 +7,20 @@ type Inputs = {
   confirmPassword: string;
 };
 
-const RegisterForm = () => {
+const RegisterForm = ({ parentCallback }: any) => {
   const [formError, setFormError] = useState<string>("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     try {
       if (data.password != data.confirmPassword) {
         setFormError("Password donot match");
       } else {
+        setFormError("");
         // make post request
 
         console.log(data);
@@ -26,6 +28,10 @@ const RegisterForm = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleButtonSwitch = (value: number) => {
+    parentCallback(value);
   };
 
   return (
@@ -36,7 +42,9 @@ const RegisterForm = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         {formError && (
-          <p className="text-red-500 text-xs italic">{formError}</p>
+          <p className="text-red-500 text-xs italic py-3 text-center">
+            {formError}
+          </p>
         )}
 
         {/* email field */}
@@ -110,12 +118,14 @@ const RegisterForm = () => {
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
+            onClick={() => handleButtonSwitch(1)}
           >
             Sign up
           </button>
           <a
             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
             href="#"
+            onClick={() => handleButtonSwitch(0)}
           >
             Sign In
           </a>

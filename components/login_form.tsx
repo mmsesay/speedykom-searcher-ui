@@ -5,13 +5,17 @@ type Inputs = {
   password: string;
 };
 
-const LoginForm = () => {
+const LoginForm = ({ parentCallback }: any) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
+  const handleButtonSwitch = (value: number) => {
+    parentCallback(value);
+  };
 
   return (
     <div className="w-full max-w-xs ">
@@ -64,12 +68,14 @@ const LoginForm = () => {
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
+            onClick={() => handleButtonSwitch(0)}
           >
             Sign In
           </button>
           <a
             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
             href="#"
+            onClick={() => handleButtonSwitch(1)}
           >
             Create Account
           </a>

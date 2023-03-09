@@ -1,7 +1,15 @@
+import { useState } from "react";
 import Head from "next/head";
-import { LoginForm } from "@/components";
+import { LoginForm, RegisterForm } from "@/components";
 
 export default function Home() {
+  const [formView, setFormView] = useState<number>(0);
+
+  const handleChildData = (value: number) => {
+    console.log(value);
+    setFormView(value);
+  };
+
   return (
     <>
       <Head>
@@ -12,7 +20,11 @@ export default function Home() {
       </Head>
       <main>
         <div className="flex items-center justify-center h-screen bg-gray-200">
-          <LoginForm />
+          {formView === 0 ? (
+            <LoginForm parentCallback={handleChildData} />
+          ) : (
+            <RegisterForm parentCallback={handleChildData} />
+          )}
         </div>
       </main>
     </>
