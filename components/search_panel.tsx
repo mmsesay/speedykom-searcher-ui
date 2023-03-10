@@ -50,7 +50,7 @@ const SearchPanel = ({ parentCallback }: any) => {
           // make post request
           axios
             .get(
-              `http://127.0.0.1:5000/api/v1/search/${data.search_text}`,
+              `http://127.0.0.1:5000/api/v1/records/search/${data.search_text}`,
               config
             )
             .then((res: any) => {

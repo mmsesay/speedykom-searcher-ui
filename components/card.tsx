@@ -1,9 +1,16 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const Card = ({ data, key }: any) => {
+  const router = useRouter();
+
   console.log(data);
   return (
-    <div className="flex justify-center w-64" key={key}>
+    <div
+      className="flex justify-center w-64 cursor-pointer hover:shadow-lg hover:border-2 hover:rounded-lg hover:border-blue-400"
+      key={key}
+      onClick={() => router.push(`records/${data.Id}`)}
+    >
       <div className="block max-w-sm rounded-lg bg-white shadow-lg dark:bg-neutral-700">
         <a href="#!">
           <Image
