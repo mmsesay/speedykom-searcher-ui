@@ -12,6 +12,8 @@ const Dashboard = () => {
     setRecordsArray(response);
   };
 
+  const items = [1, 2, 3, 4, 5, 6, 7, 8];
+
   useMemo(() => {
     console.log(recordsArray);
   }, []);
@@ -23,19 +25,17 @@ const Dashboard = () => {
         <SearchPanel parentCallback={childResponse} />
       </div>
       {/* content section */}
-      <div className="bg-blue-600 h-fit my-3">
-        {/* {recordsArray &&
-          recordsArray?.map((record: any, index: number) => (
-            <div></div>
-            <p key={index}>{record.Title}</p>
-          ))} */}
+      <div className="bg-blue-600 h-fit my-3 grid grid-cols-5 gap-5 p-2">
+        {recordsArray.map((record: any, index: number) => (
+          <Card data={record} key={index} />
+        ))}
       </div>
       {/* footer */}
-      <div>
+      {/* <div>
         <p className="text-center text-gray-500 text-xs absolute inset-x-0 bottom-0 mb-10">
           &copy;2023 Health Searcher App. All rights reserved.
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };
