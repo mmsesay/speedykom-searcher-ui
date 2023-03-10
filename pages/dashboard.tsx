@@ -4,60 +4,43 @@ import localForage from "localforage";
 import axios from "axios";
 
 import { Card, SearchPanel, Spinner } from "@/components";
-import data from "@/data/records.json";
 
-// This function gets called at build time
-export async function getStaticProps() {
-  let records: Array<any> = [];
-  let errorMsg: string = "";
-
-  localForage
-    .getItem("tk")
-    .then((token: any) => {
-      // header configs
-      let config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      // make post request
-      axios
-        .get(`http://127.0.0.1:5000/api/v1/records`, config)
-        .then((res: any) => {
-          if (res?.data?.status === 200) {
-            records = res?.data?.data?.records;
-          }
-        })
-        .catch((err: any) => {
-          if (err?.response?.data?.msg) {
-            errorMsg = err?.response?.data?.msg;
-          }
-        });
-    })
-    .catch((err) => {
-      console.log("e: ", err);
-    });
-
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      records,
-      errorMsg,
-    },
-  };
-}
-
-const Dashboard = ({ records, errorMsg }: any) => {
+const Dashboard = () => {
   const [recordsArray, setRecordsArray] = useState<any>([]);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   const childResponse = (response: any) => {
-    console.log(response);
     setRecordsArray(response);
   };
 
   useMemo(() => {
-    setRecordsArray(records);
-  }, [records]);
+    localForage
+      .getItem("tk")
+      .then((token: any) => {
+        // header configs
+        let config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        // make post request
+        axios
+          .get(`http://127.0.0.1:5000/api/v1/records`, config)
+          .then((res: any) => {
+            if (res?.data?.status === 200) {
+              setRecordsArray(res?.data?.data?.records);
+            }
+          })
+          .catch((err: any) => {
+            if (err?.response?.data?.msg) {
+              setErrorMsg(err?.response?.data?.msg);
+            }
+          });
+      })
+      .catch((err) => {
+        console.log("e: ", err);
+      });
+  }, []);
 
   return (
     <div className="overflow-hidden">
