@@ -16,6 +16,15 @@ A simple web app that enable users to register, login and search for health rela
    - `yarn install` or `npm install` to install packages
    - `yarn dev` or `npm run dev` to local dev server
 
+- **Please run the following commands on your terminal to start the app using docker:**
+
+  - Please ensure you have docker installed and is running.
+  - Please ensure you have cloned the project and navigate to the root directory via the terminal
+  - Use `docker build -t searcher-ui .` in your ternimal and press enter
+  - Use `docker images` to verify you see the image being created
+  - Use `docker run -p 3000:3000 searcher-ui` to start the app. You can add `-d` flag to the command to run on detach mode.
+  - Finally, open your browser and interact with the app.
+
 ## Author
 
 👤 **Muhammad Sesay**
